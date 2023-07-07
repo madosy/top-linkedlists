@@ -82,20 +82,36 @@ class LinkedList {
   }
 
   insertAt(value, index) {
-    if (index > this.size || index < 0) throw new Error("Enter valid index");
-    let newNode = new Node(value);
-    let old = this.at(index);
-    newNode.previous = old.previous;
-    newNode.next = old;
-    old.previous.next = newNode;
-    old.previous = newNode;
+    if (index >= this.size || index < 0) throw new Error("Enter valid index");
+    if (index == this.size) {
+      this.append(value);
+    } else if (index == 0) {
+      this.prepend(value);
+    } else {
+      let newNode = new Node(value);
+      let old = this.at(index);
+      newNode.previous = old.previous;
+      newNode.next = old;
+      old.previous.next = newNode;
+      old.previous = newNode;
+    }
+    this.size += 1;
   }
 
   removeAt(index) {
     if (index > this.size || index < 0) throw new Error("Enter valid index");
     let old = this.at(index);
-    old.next.previous = old.previous;
-    old.previous.next = old.next;
+    if (index == this.size - 1) {
+      this.pop();
+      this.tail = old.previous;
+    } else if (index == 0) {
+      this.head = old.next;
+      old.next.previous = null;
+    } else {
+      old.previous.next = old.next;
+      old.next.previous = old.previous;
+    }
+    this.size -= 1;
   }
 }
 
